@@ -1,0 +1,57 @@
+/* Reset some default styles in browsers */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Apply a background color and text color to the entire page */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f8f8f8;
+    color: #333;
+    padding-top: 20px;
+}
+
+/* Style the header section */
+header {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Add some padding and margin to sections */
+section {
+    padding: 20px;
+    margin: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style headings inside the sections */
+section h2 {
+    margin-bottom: 10px;
+}
+
+/* Style the list in the features section */
+#features ul {
+    list-style-type: square;
+    margin-left: 20px;
+}
+
+/* Style the items in the list */
+#features li {
+    margin-bottom: 5px;
+}
+
+/* Style the footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #eee;
+}
