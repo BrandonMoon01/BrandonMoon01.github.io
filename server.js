@@ -44,7 +44,8 @@ app.post('/get-channel-recommendations', async (req, res) => {
             }),
         });
         const data = await response.json();
-        res.send(data);
+        const recommendationText = data.choices[0].message.content;
+        res.json({ recommendationText });
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('An error occurred while fetching recommendations.');

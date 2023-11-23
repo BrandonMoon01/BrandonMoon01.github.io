@@ -1,14 +1,12 @@
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
+  anchor.addEventListener('click', function (e) {
       e.preventDefault();
       document.querySelector(this.getAttribute('href')).scrollIntoView({
         behavior: 'smooth'
       });
-    });
   });
-  
+});
 
-// Assuming this is the complete main.js file
 document.getElementById('searchButton').addEventListener('click', function() {
   var searchInput = document.getElementById('searchInput').value;
   fetch('/get-channel-recommendations', {
@@ -16,14 +14,15 @@ document.getElementById('searchButton').addEventListener('click', function() {
       headers: {
           'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ prompt: "I am looking for YouTube channels that focus on " + searchInput })
+      body: JSON.stringify({ prompt: searchInput })
   })
   .then(response => response.json())
   .then(data => {
-      console.log(data);
-      // Assuming the response data is the list of recommendations
-      var recommendations = data.choices[0].text.trim().split('\n').slice(0, 5);
-      updateRecommendationsList(recommendations);
+      if (data.recommendationText) {
+          document.getElementById('recommendationsTextbox').value = data.recommendationText;
+      } else {
+          document.getElementById('recommendationsTextbox').value = 'No recommendations found.';
+      }
   })
   .catch(error => {
       console.error('Error:', error);
