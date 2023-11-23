@@ -2,13 +2,18 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 app.use(express.json());
 
-app.use(express.static('public'));
+app.use(express.static('.'));
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY; 
+
+// Resolve the __dirname
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 
 app.post('/get-channel-recommendations', async (req, res) => {
     const prompt = req.body.prompt;
@@ -38,8 +43,10 @@ app.post('/get-channel-recommendations', async (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    const indexPath = path.join(__dirname, 'index.html');
+    res.sendFile(indexPath);
 });
+
 
 const PORT = 3000;
 app.listen(PORT, () => {
