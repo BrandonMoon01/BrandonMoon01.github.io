@@ -1,8 +1,12 @@
 // server.js
+import dotenv from 'dotenv';
 import express from 'express';
 import fetch from 'node-fetch';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+dotenv.config();
+console.log("Using OpenAI API Key:", process.env.OPENAI_API_KEY);
 
 const app = express();
 app.use(express.json());
@@ -16,22 +20,27 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 
 app.post('/get-channel-recommendations', async (req, res) => {
-    const prompt = req.body.prompt;
+    const userSearchInput = req.body.prompt; // This is the text from the search bar input
     
     try {
-        const response = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${OPENAI_API_KEY}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                prompt: prompt,
-                max_tokens: 150,
-                temperature: 0.7,
-                top_p: 1,
-                frequency_penalty: 0,
-                presence_penalty: 0
+                model: "gpt-3.5-turbo",
+                messages: [
+                    {
+                        role: "system",
+                        content: "You are a helpful assistant providing YouTube channel recommendations."
+                    },
+                    {
+                        role: "user",
+                        content: `Give me YouTube channels similar to ${userSearchInput}.`
+                    }
+                ]
             }),
         });
         const data = await response.json();

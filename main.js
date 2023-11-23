@@ -20,6 +20,7 @@ document.getElementById('searchButton').addEventListener('click', function() {
   })
   .then(response => response.json())
   .then(data => {
+      console.log(data);
       // Assuming the response data is the list of recommendations
       var recommendations = data.choices[0].text.trim().split('\n').slice(0, 5);
       updateRecommendationsList(recommendations);
