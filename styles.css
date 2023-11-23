@@ -1,0 +1,150 @@
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-image: url('/eberhard-grossgasteiger-NvesrDbsrL4-unsplash.jpg'); 
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.fullscreen-div {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  color: white;
+}
+
+.content h1 {
+  font-size: 4em; 
+  margin-bottom: 0.2em; 
+  display: block; 
+  text-align: center;
+  padding-left: 5px;
+}
+
+.content .tagline {
+  font-size: 1.8em; 
+  margin-top: 0.2em; 
+  display: block; 
+  text-align: center;
+}
+
+
+.explore-link {
+  font-size: 1.5em; 
+  padding: 10px 20px;
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.explore-link:hover {
+  background-color: white;
+  color: #555;
+}
+
+
+.search-wrapper {
+  text-align: center;
+  padding: 2rem;
+}
+
+.search-title {
+  color: #333; 
+  margin-bottom: 1rem;
+  font-size: 2rem; 
+}
+
+.search-box {
+  display: inline-block;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+#searchInput {
+  width: 300px; 
+  padding: 10px;
+  border: 1px solid #ccc; 
+  border-right: none; 
+  border-radius: 5px 0 0 5px; 
+}
+
+#searchButton {
+  padding: 10px 20px;
+  border: 1px solid #ccc; 
+  background-color: #f8f8f8;
+  border-radius: 0 5px 5px 0; 
+  cursor: pointer;
+}
+
+#searchButton:hover {
+  background-color: #e7e7e7; 
+}
+
+#contentPreference {
+  padding: 10px;
+  border: 1px solid #ccc; 
+  border-radius: 5px;
+  margin-right: -1px; 
+}
+
+#searchInput {
+  border-radius: 5px 0 0 0; 
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  50% { border-color: transparent; }
+}
+
+.typing {
+  display: inline-block;
+  overflow: hidden; 
+  white-space: nowrap; 
+  border-right: 3px solid white; 
+  box-sizing: border-box;
+  animation: blink-caret .75s step-end infinite;
+}
+
+.title-typing {
+  animation: typing 3.5s steps(30, end) forwards, blink-caret .75s step-end infinite;
+}
+
+.tagline-typing {
+  visibility: hidden;
+  animation: typing 4.5s steps(50, end) 2.5s forwards, blink-caret .75s step-end infinite;
+}
+
+@keyframes makeVisible {
+  0% { visibility: hidden; }
+  100% { visibility: visible; }
+}
+
+.tagline-typing {
+  animation: typing 4.5s steps(50, end) 3.5s forwards, makeVisible 0s 3.5s forwards, blink-caret .75s step-end infinite;
+}
+
+.explore-link {
+  position: absolute; 
+  bottom: 200px; 
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
+
+

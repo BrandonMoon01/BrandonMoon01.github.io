@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SubSuggest - Discover New Channels</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="fullscreen-div">
+  <div class="content">
+    <h1 class="typing title-typing">SubSuggest</h1>
+      <p class="typing tagline-typing">The only YouTube channel recommendation tool you'll ever need.</p>
+    <a href="#search" class="explore-link">Explore Channels</a>
+  </div>
+</div>
+
+<!-- Search Section -->
+<div class="fullscreen-div" id="search">
+  <div class="search-container">
+    <!-- Add this within your body tag where you want the search bar to appear -->
+<div class="search-wrapper">
+  <h2 class="search-title">The complex made simple.</h2>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Enter Creators Name" aria-label="Search">
+    <select id="contentPreference" aria-label="Content Preference">
+      <option value="similar">Similar Content</option>
+      <option value="new">New Content</option>
+    </select>
+    <button id="searchButton" aria-label="Search">Search</button>
+  </div>
+</div>
+
+  </div>
+</div>
+
+<ul id="recommendationsList"></ul>
+<script src="main.js"></script>
+</body>
+</html>
