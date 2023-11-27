@@ -19,9 +19,9 @@ document.getElementById('searchButton').addEventListener('click', function() {
   .then(response => response.json())
   .then(data => {
       if (data.recommendationText) {
-          document.getElementById('recommendationsTextbox').value = data.recommendationText;
+        document.getElementById('recommendationsTextbox').value = data.recommendationText;
       } else {
-          document.getElementById('recommendationsTextbox').value = 'No recommendations found.';
+        document.getElementById('recommendationsTextbox').value = 'No recommendations found.';
       }
   })
   .catch(error => {
