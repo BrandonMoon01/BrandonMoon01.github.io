@@ -161,3 +161,18 @@ body {
  
   width: auto; 
 }
+
+#notFoundResult{
+  color: rgb(230, 12, 12); /* Text color */
+  display: none; /* Hide initially */
+  background-color: rgba(255, 255, 255, 0.7); /* Slightly opaque white background */
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  font-size: 1.2em;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+ 
+  width: auto; 
+}
