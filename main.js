@@ -8,8 +8,25 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 document.getElementById('searchButton').addEventListener('click', function() {
   var searchInput = document.getElementById('searchInput').value.toLowerCase();
-  var csvUrl = 'https://raw.githubusercontent.com/BrandonMoon01/BrandonMoon01.github.io/main/modified_recomm_recs.csv';
+  var contentPreference = document.getElementById('contentPreference').value;
 
+  // Choose the CSV file based on the selected option
+  var csvUrl;
+  switch (contentPreference) {
+    case 'youtube':
+      csvUrl = 'https://raw.githubusercontent.com/BrandonMoon01/BrandonMoon01.github.io/main/modified_recomm_recs.csv'; // Replace with the actual URL for YouTube CSV
+      break;
+    case 'reddit':
+      csvUrl = 'https://raw.githubusercontent.com/BrandonMoon01/BrandonMoon01.github.io/main/reddit_recs.csv'; // Replace with the actual URL for Reddit CSV
+      break;
+    case 'content':
+      csvUrl = 'https://raw.githubusercontent.com/BrandonMoon01/BrandonMoon01.github.io/main/content_recs.csv'; // Replace with the actual URL for Content CSV
+      break;
+    default:
+      // Handle default case or show an error message
+      console.error('Invalid content preference:', contentPreference);
+      return;
+  }
   // Fetch CSV data
   fetch(csvUrl)
       .then(response => response.text())
@@ -23,40 +40,48 @@ document.getElementById('searchButton').addEventListener('click', function() {
               // Assuming the search term should match the first column
               if (columns[0].toLowerCase() === searchInput) {
                   found = true;
-                  console.log(rows[i] + " dhsfiuds");
-                  displayResult(rows[i]);
+                  displayResult(rows[i], found);
                   break;
               }
           }
 
           if (!found) {
-              displayResult('No match found');
+              displayResult('Channel not in channel list.', false);
           }
       })
       .catch(error => console.error('Error:', error));
 });
 
-function displayResult(result) {
+function displayResult(result, found) {
+
   var resultElement = document.getElementById('result');
+  resultElement.innerHTML = '';
 
-  // Split the result string into name and JSON array
-  var [name, channelsJSON] = result.split(',"');
+  if(found){
 
-  // Remove the trailing quote from the name
-  name = name.slice(1);
-
-  // Remove the trailing quote and comma from the JSON array
-  var channelsString = channelsJSON.slice(0, -3);
-  var stringWithoutBrackets = channelsString.slice(1, -1);
-
-  var wordsArray = stringWithoutBrackets.replace(/"/g, '').split(', ');
-  // Parse the JSON array to an array
+    // Split the result string into name and JSON array
+    var [name, channelsJSON] = result.split(',"');
 
 
-  resultElement.innerHTML = wordsArray.join('<br>');
+    // Remove the trailing quote and comma from the JSON array
+    var channelsString = channelsJSON.slice(0, -3);
+    var stringWithoutBrackets = channelsString.slice(1);
 
-  // Show the result element only when it is populated
-  resultElement.style.display = wordsArray ? 'block' : 'none';
+    var wordsArray = stringWithoutBrackets.replace(/"/g, '').split(', ');
+    // Parse the JSON array to an array
+
+    resultElement.innerHTML = wordsArray.join('<br>');
+
+    // Show the result element only when it is populated
+    resultElement.style.display = wordsArray ? 'block' : 'none';
+  }
+  else{
+
+    resultElement.innerHTML = result;
+    resultElement.id = 'notFoundResult';
+    resultElement.style.display = result ? 'block' : 'none';
+
+  }
 
 }
 
