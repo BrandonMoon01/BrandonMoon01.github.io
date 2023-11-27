@@ -23,6 +23,7 @@ document.getElementById('searchButton').addEventListener('click', function() {
               // Assuming the search term should match the first column
               if (columns[0].toLowerCase() === searchInput) {
                   found = true;
+                  console.log(rows[i] + " dhsfiuds");
                   displayResult(rows[i]);
                   break;
               }
@@ -37,10 +38,25 @@ document.getElementById('searchButton').addEventListener('click', function() {
 
 function displayResult(result) {
   var resultElement = document.getElementById('result');
-  resultElement.textContent = result;
+
+  // Split the result string into name and JSON array
+  var [name, channelsJSON] = result.split(',"');
+
+  // Remove the trailing quote from the name
+  name = name.slice(1);
+
+  // Remove the trailing quote and comma from the JSON array
+  var channelsString = channelsJSON.slice(0, -3);
+  var stringWithoutBrackets = channelsString.slice(1, -1);
+
+  var wordsArray = stringWithoutBrackets.replace(/"/g, '').split(', ');
+  // Parse the JSON array to an array
+
+
+  resultElement.innerHTML = wordsArray.join('<br>');
 
   // Show the result element only when it is populated
-  resultElement.style.display = result ? 'block' : 'none';
+  resultElement.style.display = wordsArray ? 'block' : 'none';
 
 }
 
