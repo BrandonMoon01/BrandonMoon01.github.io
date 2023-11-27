@@ -156,8 +156,8 @@ body {
   color: #333; /* Text color */
   font-size: 1.2em;
   text-align: center;
-  max-width: 600px; /* Set the maximum width as needed */
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: Add a subtle box shadow */
+ 
+  width: auto; 
 }
