@@ -6,7 +6,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-image: url('/eberhard-grossgasteiger-NvesrDbsrL4-unsplash.jpg'); 
+  background-image: url('eberhard-grossgasteiger-NvesrDbsrL4-unsplash.jpg'); 
   background-size: cover;
   background-attachment: fixed;
 }
