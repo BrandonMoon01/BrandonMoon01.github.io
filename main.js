@@ -6,28 +6,39 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       });
   });
 });
-
 document.getElementById('searchButton').addEventListener('click', function() {
-  var searchInput = document.getElementById('searchInput').value;
-  fetch('/get-channel-recommendations', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ prompt: searchInput })
-  })
-  .then(response => response.json())
-  .then(data => {
-      if (data.recommendationText) {
-        document.getElementById('recommendationsTextbox').value = data.recommendationText;
-      } else {
-        document.getElementById('recommendationsTextbox').value = 'No recommendations found.';
-      }
-  })
-  .catch(error => {
-      console.error('Error:', error);
-  });
+  var searchInput = document.getElementById('searchInput').value.toLowerCase();
+  var csvUrl = 'https://raw.githubusercontent.com/BrandonMoon01/BrandonMoon01.github.io/main/modified_recomm_recs.csv';
+
+  // Fetch CSV data
+  fetch(csvUrl)
+      .then(response => response.text())
+      .then(csvData => {
+          var rows = csvData.split('\n');
+          var found = false;
+
+          for (var i = 0; i < rows.length; i++) {
+              var columns = rows[i].split(',');
+
+              // Assuming the search term should match the first column
+              if (columns[0].toLowerCase() === searchInput) {
+                  found = true;
+                  displayResult(rows[i]);
+                  break;
+              }
+          }
+
+          if (!found) {
+              displayResult('No match found');
+          }
+      })
+      .catch(error => console.error('Error:', error));
 });
+
+function displayResult(result) {
+  document.getElementById('result').textContent = result;
+}
+
 
 function updateRecommendationsList(recommendations) {
   var list = document.getElementById('recommendationsList');
