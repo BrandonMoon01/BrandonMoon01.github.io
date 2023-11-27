@@ -36,7 +36,12 @@ document.getElementById('searchButton').addEventListener('click', function() {
 });
 
 function displayResult(result) {
-  document.getElementById('result').textContent = result;
+  var resultElement = document.getElementById('result');
+  resultElement.textContent = result;
+
+  // Show the result element only when it is populated
+  resultElement.style.display = result ? 'block' : 'none';
+
 }
 
 
