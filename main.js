@@ -90,10 +90,9 @@ function displayResult(result, found) {
           resultElement.innerHTML = wordsArray.join('<br>');
       } else {
           // Handling plain text result (like from OpenAI API)
-          resultElement.innerHTML = result;
+          // Split the result by newline and join with HTML line breaks
+          resultElement.innerHTML = result.split('\n').join('<br>');
       }
-
-      // Show the result element only when it is populated
       resultElement.style.display = 'block';
   } else {
       resultElement.innerHTML = result;
@@ -101,8 +100,6 @@ function displayResult(result, found) {
       resultElement.style.display = 'block';
   }
 }
-
-
 
 function updateRecommendationsList(recommendations) {
   var list = document.getElementById('recommendationsList');
