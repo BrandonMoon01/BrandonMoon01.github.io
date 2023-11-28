@@ -19,44 +19,17 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 // Resolve the __dirname
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Function to load and parse the CSV file
-function loadCSV(filePath) {
-    return new Promise((resolve, reject) => {
-        let results = {};
-        fs.createReadStream(filePath)
-            .pipe(csvParser())
-            .on('data', (data) => {
-                // Parse the stringified array into an actual JavaScript array
-                try {
-                    results[data.Channel] = JSON.parse(data.Recommendations);
-                } catch (error) {
-                    console.error('Error parsing recommendations for channel:', data.Channel, error);
-                }
-            })
-            .on('end', () => resolve(results))
-            .on('error', (error) => reject(error));
-    });
-}
-
-// Load the CSV data once when the server starts
-const csvFilePath = path.join(__dirname, 'modified_recomm_recs.csv'); // Adjust the file path
-let channelRecommendations = {};
-loadCSV(csvFilePath)
-    .then(data => {
-        channelRecommendations = data;
-    })
-    .catch(error => console.error('Error loading CSV:', error));
-
-
 app.post('/get-channel-recommendations', async (req, res) => {
-    const userSearchInput = req.body.prompt; // This is the text from the search bar input
+    const userSearchInput = req.body.prompt;
     
     try {
-        // Check if the channel is in the CSV data
-        if(channelRecommendations[userSearchInput]) {
-            res.json({ recommendationText: channelRecommendations[userSearchInput] });
-        } else {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        // Fetch the content of the 312_channels.txt file
+        const channelsListResponse = await fetch('https://raw.githubusercontent.com/BrandonMoon01/BrandonMoon01.github.io/main/312_channels.txt');
+        const channelsListText = await channelsListResponse.text();
+
+        const prompt = `Given the list of YouTube channels: ${channelsListText}, suggest 5 channels similar to "${userSearchInput}" that are only contained in the list I gave you and format it by only printing out the channel names each on a new line.`;
+        
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${OPENAI_API_KEY}`,
@@ -64,22 +37,12 @@ app.post('/get-channel-recommendations', async (req, res) => {
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: [
-                    {
-                        role: "system",
-                        content: "You are a helpful assistant providing YouTube channel recommendations."
-                    },
-                    {
-                        role: "user",
-                        content: `Give me YouTube channels similar to ${userSearchInput}.`
-                    }
-                ]
+                messages: [{ role: "system", content: prompt }]
             }),
         });
         const data = await response.json();
         const recommendationText = data.choices[0].message.content;
         res.json({ recommendationText });
-        }
         
     } catch (error) {
         console.error('Error:', error);

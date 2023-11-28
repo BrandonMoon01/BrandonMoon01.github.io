@@ -6,6 +6,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       });
   });
 });
+
 document.getElementById('searchButton').addEventListener('click', function() {
   var searchInput = document.getElementById('searchInput').value.toLowerCase();
   var contentPreference = document.getElementById('contentPreference').value;
@@ -46,44 +47,61 @@ document.getElementById('searchButton').addEventListener('click', function() {
           }
 
           if (!found) {
-              displayResult('Channel not in channel list.', false);
+            // If not found in CSV, request recommendations from OpenAI API
+            fetchOpenAIRecommendations(searchInput);
           }
       })
       .catch(error => console.error('Error:', error));
 });
 
-function displayResult(result, found) {
+function fetchOpenAIRecommendations(channel) {
+  fetch('/get-channel-recommendations', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt: channel })
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.recommendationText) {
+          displayResult(data.recommendationText, true);
+      } else {
+          displayResult('No recommendations found.', false);
+      }
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      displayResult('Error fetching recommendations.', false);
+  });
+}
 
+function displayResult(result, found) {
   var resultElement = document.getElementById('result');
   resultElement.innerHTML = '';
 
-  if(found){
+  if (found) {
+      if (result.includes(',"')) {
+          // Handling CSV format result
+          var [name, channelsJSON] = result.split(',"');
+          var channelsString = channelsJSON.slice(0, -3);
+          var stringWithoutBrackets = channelsString.slice(1);
+          var wordsArray = stringWithoutBrackets.replace(/"/g, '').split(', ');
+          resultElement.innerHTML = wordsArray.join('<br>');
+      } else {
+          // Handling plain text result (like from OpenAI API)
+          resultElement.innerHTML = result;
+      }
 
-    // Split the result string into name and JSON array
-    var [name, channelsJSON] = result.split(',"');
-
-
-    // Remove the trailing quote and comma from the JSON array
-    var channelsString = channelsJSON.slice(0, -3);
-    var stringWithoutBrackets = channelsString.slice(1);
-
-    var wordsArray = stringWithoutBrackets.replace(/"/g, '').split(', ');
-    // Parse the JSON array to an array
-
-    resultElement.innerHTML = wordsArray.join('<br>');
-
-    // Show the result element only when it is populated
-    resultElement.style.display = wordsArray ? 'block' : 'none';
+      // Show the result element only when it is populated
+      resultElement.style.display = 'block';
+  } else {
+      resultElement.innerHTML = result;
+      resultElement.id = 'notFoundResult';
+      resultElement.style.display = 'block';
   }
-  else{
-
-    resultElement.innerHTML = result;
-    resultElement.id = 'notFoundResult';
-    resultElement.style.display = result ? 'block' : 'none';
-
-  }
-
 }
+
 
 
 function updateRecommendationsList(recommendations) {
