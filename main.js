@@ -65,7 +65,7 @@ function fetchOpenAIRecommendations(channel) {
   .then(response => response.json())
   .then(data => {
       if (data.recommendationText) {
-          displayResult(data.recommendationText, true);
+          displayResult(data.recommendationText, true, true); // Pass true for fromAPI
       } else {
           displayResult('No recommendations found.', false);
       }
@@ -76,12 +76,16 @@ function fetchOpenAIRecommendations(channel) {
   });
 }
 
-function displayResult(result, found) {
+function displayResult(result, found, fromAPI = false) {
   var resultElement = document.getElementById('result');
   resultElement.innerHTML = '';
 
   if (found) {
-      if (result.includes(',"')) {
+      if (fromAPI) {
+          // Handling OpenAI API result with a custom message
+          var apiMessage = "Your channel wasn't found in the list, how about these similar channels?<br><br>";
+          resultElement.innerHTML = apiMessage + result.split('\n').join('<br>');
+      } else if (result.includes(',"')) {
           // Handling CSV format result
           var [name, channelsJSON] = result.split(',"');
           var channelsString = channelsJSON.slice(0, -3);
@@ -89,9 +93,7 @@ function displayResult(result, found) {
           var wordsArray = stringWithoutBrackets.replace(/"/g, '').split(', ');
           resultElement.innerHTML = wordsArray.join('<br>');
       } else {
-          // Handling plain text result (like from OpenAI API)
-          // Split the result by newline and join with HTML line breaks
-          resultElement.innerHTML = result.split('\n').join('<br>');
+          resultElement.innerHTML = result;
       }
       resultElement.style.display = 'block';
   } else {
