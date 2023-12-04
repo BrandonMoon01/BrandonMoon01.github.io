@@ -13,3 +13,6 @@ Note: notebooks are written in IPython
 
 
 ## Video Link
+
+## Live Use of SubSuggest
+[SubSuggest](https://brandonmoon01.github.io/) is currently running through this repo on github pages, exlcuding the Open AI API functionality. Therefore, only the embedding recommendations can be generated.
